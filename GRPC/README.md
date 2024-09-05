@@ -1,6 +1,6 @@
 # GRPC
 
-Test GRPC (run both projects, keep server console running, send request from client swagger UI)
+Test GRPC (run both projects, keep consoles running, send request from client swagger UI)
 
 <br/>
 <br/>
@@ -74,3 +74,9 @@ builder.Services.AddGrpc();
 ...
 app.MapGrpcService<GrpcServerService>();
 ```
+
+<br />
+<br />
+
+
+![alt text](https://github.com/denis-marchenkov/assets-dump/blob/bb7bca89f4ab0bc4bf74f5a4fab08437f7f2cbfb/grpc.png)
