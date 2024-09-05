@@ -23,6 +23,6 @@ message GetItemModel {
 
 // response, containing single item
 message GetResponse {
-  GetItemModel item = 2;
+  GetItemModel item = 1;
 }
 
