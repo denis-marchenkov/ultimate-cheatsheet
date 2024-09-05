@@ -1,0 +1,28 @@
+﻿syntax = "proto3";
+
+
+option csharp_namespace = "TestGrpc";
+
+package TestGrpcService;
+
+
+service TestGrpcService {
+  rpc Get (GetRequest) returns (GetResponse);
+}
+
+
+message GetRequest {
+  string id = 1;
+}
+
+// response item model
+message GetItemModel {
+  string id = 1;
+  string name = 2;
+}
+
+// response, containing single item
+message GetResponse {
+  GetItemModel item = 2;
+}
+
