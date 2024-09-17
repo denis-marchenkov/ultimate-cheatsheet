@@ -12,7 +12,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<AppDbContext>();
 
-// add mediatr library and tell it to look for ñorresponding interface implementations in current assembly
+// add mediatr library and tell it to look for corresponding interface implementations in current assembly
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
 var app = builder.Build();
