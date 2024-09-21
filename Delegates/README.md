@@ -26,7 +26,7 @@ delegate int MulDelegate(int i);
 delegate int DivDelegate(int i);
 ```
 
-Now we define the actual functions theese deligates will be pointing at:
+Now we define the actual functions theese delegates will be pointing at:
 
 ```
 int MultiplyByTwo(int i)
@@ -103,7 +103,7 @@ mulByTwo(4);
 
 What the compiler gives us this time:
 
-```
+```diff
 [CompilerGenerated]
 internal class Program
 {
@@ -122,7 +122,7 @@ internal class Program
   private sealed class \u003C\u003Ec
   {
     public static readonly Program.\u003C\u003Ec \u003C\u003E9;
-    public static MulDelegate \u003C\u003E9__0_0;
++   public static MulDelegate \u003C\u003E9__0_0;
 
     static \u003C\u003Ec()
     {
@@ -134,10 +134,10 @@ internal class Program
       base.\u002Ector();
     }
 
-    internal int \u003C\u003CMain\u003E\u0024\u003Eb__0_0(int a)
-    {
-      return a * 2;
-    }
++   internal int \u003C\u003CMain\u003E\u0024\u003Eb__0_0(int a)
++   {
++     return a * 2;
++   }
   }
 }
 ```
@@ -161,7 +161,7 @@ divByTwo(4);
 
 Now the compiler should create two classes? No, it won't. New delegate will be added into the same class:
 
-```
+```diff
 [CompilerGenerated]
 internal class Program
 {
@@ -183,8 +183,8 @@ internal class Program
   private sealed class \u003C\u003Ec
   {
     public static readonly Program.\u003C\u003Ec \u003C\u003E9;
-    public static MulDelegate \u003C\u003E9__0_0;
-    public static DivDelegate \u003C\u003E9__0_1;
++   public static MulDelegate \u003C\u003E9__0_0;
++   public static DivDelegate \u003C\u003E9__0_1;
 
     static \u003C\u003Ec()
     {
@@ -196,15 +196,15 @@ internal class Program
       base.\u002Ector();
     }
 
-    internal int \u003C\u003CMain\u003E\u0024\u003Eb__0_0(int a)
-    {
-      return a * 2;
-    }
++   internal int \u003C\u003CMain\u003E\u0024\u003Eb__0_0(int a)
++   {
++     return a * 2;
++   }
 
-    internal int \u003C\u003CMain\u003E\u0024\u003Eb__0_1(int a)
-    {
-      return a / 2;
-    }
++   internal int \u003C\u003CMain\u003E\u0024\u003Eb__0_1(int a)
++   {
++     return a / 2;
++   }
   }
 }
 ```
@@ -215,11 +215,11 @@ So it's the same private sealed class but now it has two internal methods which 
 
 Now it gets better. Remember the common (and wrong) definition of value types in .NET? "Value types live on stack". 
 
-More correct way to define it would be "Value types may live on stack if they are non static, local, not captured by anonymous function and not a field of a class.". Lets see what delegates have to say to that. 
+More correct way to define it would be "Value types may live on stack if they are non static, local, not captured by anonymous function and not a field of a class.". Lets see what delegates have to say about that. 
 
 In particular lets see how closures will behave. Closures are well known for capturing variables out of scope even when scope has finished its execution. 
 
-Lets define a couple of value type variables and modify our our delegate for number multiplication so it points to slightly different function:
+Lets define a couple of value type variables and modify our delegate for number multiplication so it points to slightly different function:
 
 
 ```
@@ -236,7 +236,7 @@ Console.WriteLine(a);
 
 Here both ```a``` and ```b``` are integers, value types. However ```b``` is now captured by a closure delegate is pointing at. And Console.WriteLine there just to prevent compiler of throwing away ```a```. Lets see what compiler gives us this time:
 
-```
+```diff
 [CompilerGenerated]
 internal class Program
 {
@@ -244,7 +244,7 @@ internal class Program
   {
     Program.\u003C\u003Ec__DisplayClass0_0 cDisplayClass00 = new Program.\u003C\u003Ec__DisplayClass0_0();
     int a = 2;
-    cDisplayClass00.b = 4;
++   cDisplayClass00.b = 4;
     int num = new MulDelegate((object) cDisplayClass00, __methodptr(\u003C\u003CMain\u003E\u0024\u003Eb__0))(2);
     Console.WriteLine(a);
   }
@@ -257,23 +257,24 @@ internal class Program
   [CompilerGenerated]
   private sealed class \u003C\u003Ec__DisplayClass0_0
   {
-    public int b;
++   public int b;
 
     public \u003C\u003Ec__DisplayClass0_0()
     {
       base.\u002Ector();
     }
 
-    internal int \u003C\u003CMain\u003E\u0024\u003Eb__0(int i)
-    {
-      return i * this.b;
-    }
++   internal int \u003C\u003CMain\u003E\u0024\u003Eb__0(int i)
++   {
++     return i * this.b;
++   }
   }
 }
 
 ```
 
-So ```a``` still a local variable (obviously, since we did nothing to it), however ```b``` is a public field now of a private sealed class. However, it's not a delegate wrapper! It's a closure wrapper this time, notice how it has no field for ```MulDelegate```, however it has a field for ```b``` value type and a multiplication method delegate supposed to be pointing at. The delegate itself is created in the main method using ```new``` operator. So lambdas give us a delegate wrapper with public field for delegate while closures give us a class with public fields for captured variables. And remember the difference: lambda is a function without a name while closure is a function which has an access to variables not necessarily listed in its parameters.
+So ```a``` still a local variable (obviously, since we did nothing to it), however ```b``` is a public field now of a private sealed class. However, it's not a delegate wrapper. It's a closure wrapper this time, notice how it has no field for ```MulDelegate```, however it has a field for ```b``` value type and a multiplication method delegate supposed to be pointing at. The delegate itself is created in the main method using ```new``` operator. So lambdas give us a delegate wrapper class with public field for delegate while closures give us a closure wrapper class with public fields for captured variables. 
+The difference between lambda and closure is that lambda is a function without a name while closure is a function which has an access to variables not necessarily listed in its parameters.
 
 <br/>
 
