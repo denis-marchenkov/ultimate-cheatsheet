@@ -11,7 +11,7 @@ Delegate is a pointer to a specific method with certain signature.
 
 <br />
 
-The main difference is how compiler handles variours declarations.
+The main difference is how compiler handles various declarations.
 
 
 ## Delegates
@@ -278,7 +278,25 @@ The difference between lambda and closure is that lambda is a function without a
 
 <br/>
 
+## Actions, Func
 
+<br/>
+
+So far it was all about delegates, but what about ```Action``` and ```Func```. Well, those are delegates, more sintactic sugar.
+
+```Action``` is a delegate, which takes in parameters but doesn't return value. It's already defined delegate, defined for convenience:
+
+```
+delegate void Action<in T>(T obj)
+```
+
+While ```Func``` is also a delegate, but this time it both has input parameters as well as the return value:
+
+```
+delegate TResult Func<in T, out TResult>(T arg)
+```
+
+And there are a bunch of overloads for ```Func``` and ```Action``` for multiple input parameters.
 
 
 
