@@ -1,0 +1,6 @@
+@NumbersApi_HostAddress = https://localhost:44344
+
+GET {{NumbersApi_HostAddress}}/digits/10
+Accept: application/json
+
+###

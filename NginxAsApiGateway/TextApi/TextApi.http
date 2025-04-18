@@ -1,0 +1,6 @@
+@TextApi_HostAddress = https://localhost:44381
+
+GET {{TextApi_HostAddress}}/sentences/10
+Accept: application/json
+
+###

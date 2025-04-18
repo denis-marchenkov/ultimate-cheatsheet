@@ -1,0 +1,42 @@
+services:
+
+  numbers-api:
+    build:
+      context: ./NumbersApi
+      dockerfile: Dockerfile
+    ports:
+      - "5001:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  text-api:
+    build:
+      context: ./TextApi
+      dockerfile: Dockerfile
+    ports:
+      - "5002:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  nginx-gateway:
+    build:
+      context: ./nginx-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - text-api
+      - numbers-api
+    networks:
+      - app-network
+    restart: unless-stopped
+
+networks:
+  app-network:
+    driver: bridge
