@@ -1,10 +1,10 @@
-# HttpClient memo
+# Nginx as an API Gateway.
 
-Using Nginx as an API Gateway.
+
 <br/>
+
 Setting up Nginx in a docker container to act as a gateway for containerized api projects.
 
-<br/>
 <br/>
 
 Benefits of Nginx as an API gateway:
